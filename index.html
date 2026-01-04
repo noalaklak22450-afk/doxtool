@@ -1,232 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact Us</title>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us</title>
+  <style>
     body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #ffffff;
-        overflow: hidden;
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-
-    canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: -1;
+    .contact-form {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
     }
-
-    .container {
-        max-width: 600px;
-        margin: 80px auto;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-        position: relative;
-        z-index: 1;
+    .contact-form h2 {
+      text-align: center;
+      margin-bottom: 20px;
     }
-
-    h1 {
-        text-align: center;
-        color: #333;
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
-
-    form {
-        display: flex;
-        flex-direction: column;
+    .contact-form button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
     }
-
-    label {
-        margin-bottom: 5px;
-        font-weight: bold;
+    .contact-form button:hover {
+      background-color: #0056b3;
     }
-
-    input, textarea {
-        padding: 12px;
-        margin-bottom: 20px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 16px;
+    .contact-form .status {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
     }
-
-    textarea {
-        resize: vertical;
-        min-height: 120px;
-    }
-
-    button {
-        padding: 15px;
-        background: linear-gradient(135deg, #4fa1f2, #1e3ed4);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-
-    button:hover {
-        background: linear-gradient(135deg, #1e3ed4, #4fa1f2);
-    }
-
-    .success-message, .error-message {
-        text-align: center;
-        font-weight: bold;
-        display: none;
-        margin-top: 20px;
-    }
-
-    .success-message { color: green; }
-    .error-message { color: red; }
-</style>
+  </style>
 </head>
 <body>
-
-<canvas id="background"></canvas>
-
-<div class="container">
-    <h1>Contact Us</h1>
+  <div class="contact-form">
+    <h2>Contact Us</h2>
     <form id="contactForm">
-        <label for="from_name">Last Name</label>
-        <input type="text" id="from_name" name="from_name" required>
-
-        <label for="reply_to">Email</label>
-        <input type="email" id="reply_to" name="reply_to" required>
-
-        <label for="message">put whatever u want</label>
-        <textarea id="message" name="message" required></textarea>
-
-        <button type="submit">Send</button>
+      <input type="text" name="user_name" placeholder="Your Name" required>
+      <input type="email" name="user_email" placeholder="Your Email" required>
+      <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+      <button type="submit">Send</button>
+      <div class="status" id="status"></div>
     </form>
+  </div>
 
-    <p class="success-message" id="successMessage">Thank you! Your message has been sent.</p>
-    <p class="error-message" id="errorMessage">Oops! Something went wrong. Please try again.</p>
-</div>
+  <!-- Include EmailJS SDK -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("ystAdcoKXL-eSJG5l"); // Replace with your EmailJS public key
+    })();
 
-<!-- EmailJS SDK -->
-<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-<script>
-emailjs.init("PHhYJ1G50wfvgouUX");
+    const form = document.getElementById('contactForm');
+    const status = document.getElementById('status');
 
-const form = document.getElementById('contactForm');
-const successMessage = document.getElementById('successMessage');
-const errorMessage = document.getElementById('errorMessage');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
 
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    emailjs.sendForm('service_0ks4bna', 'template_mz4rmm1', this)
+      emailjs.sendForm('service_1m7jzix', 'template_mz4rmm1', this)
         .then(() => {
-            successMessage.style.display = 'block';
-            errorMessage.style.display = 'none';
-            form.reset();
-        })
-        .catch(err => {
-            successMessage.style.display = 'none';
-            errorMessage.style.display = 'block';
-            console.error(err);
+          status.textContent = "Message sent successfully!";
+          status.style.color = "green";
+          form.reset();
+        }, (err) => {
+          status.textContent = "Oops! Something went wrong.";
+          status.style.color = "red";
+          console.error(err);
         });
-});
-</script>
-
-<!-- Gradient Particle Background -->
-<script>
-const canvas = document.getElementById('background');
-const ctx = canvas.getContext('2d');
-
-let particles = [];
-let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
-class Particle {
-    constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.radius = Math.random() * 35 + 30; // Big taches
-        this.vx = Math.random() * 0.3 - 0.15;
-        this.vy = Math.random() * 0.3 - 0.15;
-
-        // Fixed organic shape
-        this.points = [];
-        const count = 8;
-        for (let i = 0; i < count; i++) {
-            this.points.push(
-                this.radius * (0.75 + Math.random() * 0.4)
-            );
-        }
-
-        this.angle = Math.random() * Math.PI * 2;
-        this.angularSpeed = Math.random() * 0.02 - 0.01;
-    }
-
-    draw() {
-        const grad = ctx.createRadialGradient(
-            this.x, this.y, this.radius * 0.2,
-            this.x, this.y, this.radius
-        );
-
-        grad.addColorStop(0, "rgba(80,160,255,0.85)"); // strong center
-        grad.addColorStop(1, "rgba(40,80,200,0.35)"); // softer edges
-
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        for (let i = 0; i < this.points.length; i++) {
-            const angle = (i / this.points.length) * Math.PI * 2;
-            const r = this.points[i];
-            const px = this.x + Math.cos(angle) * r;
-            const py = this.y + Math.sin(angle) * r;
-            if (i === 0) ctx.moveTo(px, py);
-            else ctx.lineTo(px, py);
-        }
-        ctx.closePath();
-        ctx.fill();
-    }
-
-    update() {
-        this.x += this.vx + (mouse.x - this.x) * 0.0006;
-        this.y += this.vy + (mouse.y - this.y) * 0.0006;
-        this.angle += this.angularSpeed;
-
-        if (this.x > canvas.width + this.radius) this.x = -this.radius;
-        if (this.x < -this.radius) this.x = canvas.width + this.radius;
-        if (this.y > canvas.height + this.radius) this.y = -this.radius;
-        if (this.y < -this.radius) this.y = canvas.height + this.radius;
-    }
-}
-
-function initParticles() {
-    particles = [];
-    for (let i = 0; i < 25; i++) { // fewer but bigger
-        particles.push(new Particle());
-    }
-}
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-        p.update();
-        p.draw();
     });
-    requestAnimationFrame(animate);
-}
-
-window.addEventListener('mousemove', e => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-});
-
-initParticles();
-animate();
-</script>
-
+  </script>
 </body>
 </html>
